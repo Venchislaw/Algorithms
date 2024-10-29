@@ -3,7 +3,7 @@ class SinglyListNode:
         self.val = val
         self.next = next
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Node({self.val} | next={self.next})"
 
 
@@ -13,19 +13,14 @@ class DoublyListNode:
         self.prev = prev
         self.next = next
 
+    def __repr__(self) -> str:
+        return f"""Node({self.val} | prev={self.prev.val if self.prev
+                else self.prev} | next={self.next.val if self.next else self.next})"""
 
 class SinglyLinkedList:
     def __init__(self, head=None):
         self.head = head
         self.tail = head
-    
-    def __repr__(self):
-        cur = self.head
-        res = []
-        while cur:
-            res.append(str(cur.val))
-            cur = cur.next
-        return ", ".join(res)
         
     def insert(self, val, strategy="head") -> None:
         if strategy == "head":
@@ -58,22 +53,43 @@ class SinglyLinkedList:
                 return self
             cur.next = cur.next.next
         return self
-            
     
-# Testing:
-list_ = SinglyLinkedList()
+    def __repr__(self) -> str:
+        cur = self.head
+        res = []
+        while cur:
+            res.append(str(cur.val))
+            cur = cur.next
+        return ", ".join(res)
+
+            
+class DoublyLinkedList:
+    def __init__(self, head=None):
+        self.head = head
+        self.tail = head
+    
+    def insert(self, val, strategy="head"):
+        if strategy == "head":
+            if self.head:
+                node = DoublyListNode(val, prev=None, next=self.head)
+                self.head.prev = node
+                self.head = node
+            else:
+                self.head = DoublyListNode(val, prev=None, next=self.head)
+                self.tail = self.head
+
+    def __repr__(self) -> str:
+        cur = self.head
+        res = []
+        while cur:
+            res.append(str(cur.val))
+            cur = cur.next
+        
+        return ", ".join(res)
+
+list_ = DoublyLinkedList()
 list_.insert(1)
 list_.insert(2)
 list_.insert(3)
-print(list_)  # 3, 2, 1
-print(list_.head, list_.tail)
-print("-" * 60)
-list_ = SinglyLinkedList()
-list_.insert(1, strategy="tail")
-list_.insert(2, strategy="tail")
-list_.insert(3, strategy="tail")
-print(list_)  # 1, 2, 3
-print(list_.head, list_.tail)
-list_.remove(3)
-print(list_)  # 1, 2
-print(list_.tail)  # Node(2 | next=None)
+print(list_)
+
