@@ -77,6 +77,34 @@ class DoublyLinkedList:
             else:
                 self.head = DoublyListNode(val, prev=None, next=self.head)
                 self.tail = self.head
+        
+        elif strategy == "tail":
+            if self.tail:
+                node = DoublyListNode(val, prev=self.tail)
+                self.tail.next = node
+                self.tail = node
+            else:
+                node = DoublyListNode(val)
+                self.head = node
+                self.tail = node
+
+    def remove(self, val):
+        cur = self.head
+        while cur and cur.val != val:
+            cur = cur.next
+        
+        if cur:
+            if cur is self.head:
+                cur.next.prev = None
+                self.head = cur.next
+            if cur.next:
+                cur.next.prev = cur.prev
+            if cur.prev:
+                cur.prev.next = cur.next
+            if not cur.next:
+                self.tail = cur.prev
+        return self
+
 
     def __repr__(self) -> str:
         cur = self.head
@@ -88,8 +116,9 @@ class DoublyLinkedList:
         return ", ".join(res)
 
 list_ = DoublyLinkedList()
-list_.insert(1)
-list_.insert(2)
-list_.insert(3)
+list_.insert(1, strategy="tail")
+list_.insert(2, strategy="tail")
+list_.insert(3, strategy="tail")
+list_.remove(3)
 print(list_)
-
+print(list_.head, list_.tail)
